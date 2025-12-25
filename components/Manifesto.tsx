@@ -5,20 +5,36 @@ export function Manifesto() {
         <div className="bg-primary rounded-3xl p-12 md:p-16 lg:p-20 shadow-2xl border border-primary/10">
           <div className="space-y-8 text-center">
             <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-semibold text-white leading-tight tracking-tight">
-              Urban Pet Wellness Manifesto
+              Manifesto
             </h2>
 
             <div className="max-w-2xl mx-auto space-y-5 text-white/90 text-base md:text-lg leading-relaxed">
               <p>
-                We believe dogs are not just pets, but anchors in the ever-changing rhythm of urban life. They remind us
-                to pause, to connect, to walk slower through our neighborhoods, and to live more fully.
+                We're two best friends living in downtown Toronto with a cat, preparing to welcome a dog into our lives.
               </p>
               <p>
-                This journal is a space to record those lessons—written together, shared openly, and celebrated
-                collectively.
+                You may have met us through Tails of Toronto, where we filmed quiet, cinematic moments of you and your dog, so we could romanticise that feeling for ourselves.
               </p>
-              <p className="font-serif italic text-xl md:text-2xl text-white pt-6 leading-relaxed">
-                Together, we're building an archive of urban wellness, one Sunday at a time.
+              <p className="space-y-1">
+                <span className="block">It taught us to be grateful.</span>
+                <span className="block">How life isn't a problem to be solved but a reality to be experienced.</span>
+                <span className="block">How our dogs hold us down on our darkest days.</span>
+                <span className="block">The perfect project for two aggressively unemployed guys at the time.</span>
+              </p>
+              <p>
+                And the response was overwhelming.
+              </p>
+              <p className="space-y-1">
+                <span className="block">Somewhere along the way, we got attached.</span>
+                <span className="block pl-4">To you.</span>
+                <span className="block pl-4">To your dogs.</span>
+                <span className="block pl-4">To what they mean to people like us in this city.</span>
+              </p>
+              <p>
+                This journal is the next step in that story.
+              </p>
+              <p>
+                A place for us to explore what it truly means to bring a dog into our world, and what they bring into yours.
               </p>
             </div>
           </div>

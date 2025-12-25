@@ -51,23 +51,18 @@ export function Header() {
         <Link
           href="/"
           className="font-serif text-xl md:text-2xl font-semibold text-foreground tracking-tight hover:opacity-80 transition-opacity"
+          style={{ fontStyle: 'italic' }}
         >
-          Sundays with my dog
+          Sundayswithmydog
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
           <button
-            onClick={() => scrollToSection("featured")}
+            onClick={() => scrollToSection("cinema")}
             className="text-foreground/70 hover:text-primary transition-colors text-sm font-medium tracking-wide"
           >
-            Entries
+            Cinema
           </button>
-          <Link
-            href="/explore"
-            className="text-foreground/70 hover:text-primary transition-colors text-sm font-medium tracking-wide"
-          >
-            Explore
-          </Link>
           <button
             onClick={() => scrollToSection("journal")}
             className="text-foreground/70 hover:text-primary transition-colors text-sm font-medium tracking-wide"
@@ -75,16 +70,10 @@ export function Header() {
             Journal
           </button>
           <button
-            onClick={() => scrollToSection("manifesto")}
-            className="text-foreground/70 hover:text-primary transition-colors text-sm font-medium tracking-wide"
-          >
-            Manifesto
-          </button>
-          <button
             onClick={() => scrollToSection("journal")}
             className="bg-primary hover:bg-primary-dark text-primary-foreground rounded-full px-6 py-2.5 text-sm font-semibold transition-all shadow-sm hover:shadow-md focus:ring-2 focus:ring-primary/30 focus:outline-none"
           >
-            Submit your Sunday →
+            SUBMIT
           </button>
         </nav>
 

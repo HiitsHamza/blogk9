@@ -25,10 +25,10 @@ export function ReelStrip() {
   if (reels.length === 0) return null
 
   return (
-    <section className="py-8 md:py-12">
+    <section id="cinema" className="py-8 md:py-12">
       <div className="container mx-auto px-4 md:px-6 lg:px-8">
         <h3 className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium mb-6 md:mb-8">
-          This week's reels
+          Featured Cinema.
         </h3>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">

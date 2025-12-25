@@ -7,6 +7,8 @@ interface Entry {
   title: string | null
   lines: string[]
   author: string
+  neighborhood: string
+  date: string
   rotation: string
 }
 
@@ -46,11 +48,26 @@ export function FeaturedEntries() {
               .map((line) => line.trim())
               .filter((line) => line.length > 0)
 
+            // Format date from created_at
+            const formatDate = (dateString: string) => {
+              try {
+                const date = new Date(dateString)
+                const month = String(date.getMonth() + 1).padStart(2, '0')
+                const day = String(date.getDate()).padStart(2, '0')
+                const year = date.getFullYear()
+                return `${month}.${day}.${year}`
+              } catch {
+                return '—'
+              }
+            }
+
             return {
               id: reflection.id,
               title: reflection.title || "Untitled",
               lines,
-              author: `— ${reflection.neighborhood}`,
+              author: reflection.title || "Untitled",
+              neighborhood: reflection.neighborhood,
+              date: formatDate(reflection.created_at),
               rotation: rotations[index % rotations.length],
             }
           })
@@ -82,7 +99,7 @@ export function FeaturedEntries() {
       <div className="container mx-auto px-4 md:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-10 md:mb-14">
           <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground">
-            This week's featured lines
+            Reflections
           </h2>
           <button
             onClick={scrollToJournal}
@@ -138,6 +155,8 @@ export function FeaturedEntries() {
                     />
                   </svg>
                   <p className="text-sm text-foreground/60 italic font-serif">{entry.author}</p>
+                  <p className="text-sm text-foreground/60 italic font-serif">{entry.neighborhood}</p>
+                  <p className="text-sm text-foreground/60 italic font-serif">{entry.date}</p>
                 </div>
               </div>
             </div>
