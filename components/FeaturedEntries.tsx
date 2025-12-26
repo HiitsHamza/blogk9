@@ -4,12 +4,11 @@ import { useEffect, useState } from "react"
 
 interface Entry {
   id: string
-  title: string | null
   lines: string[]
-  author: string
   neighborhood: string
   date: string
   rotation: string
+  photoUrl: string | null
 }
 
 interface Reflection {
@@ -19,6 +18,7 @@ interface Reflection {
   neighborhood: string
   featured: boolean
   created_at: string
+  photo_url: string | null
 }
 
 const rotations = ["rotate-[-1deg]", "rotate-[0.5deg]", "rotate-[1deg]", "rotate-[-0.5deg]", "rotate-[0.75deg]"]
@@ -63,12 +63,11 @@ export function FeaturedEntries() {
 
             return {
               id: reflection.id,
-              title: reflection.title || "Untitled",
               lines,
-              author: reflection.title || "Untitled",
               neighborhood: reflection.neighborhood,
               date: formatDate(reflection.created_at),
               rotation: rotations[index % rotations.length],
+              photoUrl: reflection.photo_url,
             }
           })
 
@@ -92,6 +91,13 @@ export function FeaturedEntries() {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" })
     }
+  }
+
+  // Helper function to check if URL is a video
+  const isVideo = (url: string | null) => {
+    if (!url) return false
+    const videoExtensions = ['.mp4', '.mov', '.webm', '.avi', '.mkv']
+    return videoExtensions.some(ext => url.toLowerCase().includes(ext))
   }
 
   return (
@@ -130,8 +136,27 @@ export function FeaturedEntries() {
               />
 
               <div className="space-y-5">
-                <h3 className="font-serif text-xl md:text-2xl font-semibold text-foreground">{entry.title}</h3>
+                {/* Photo/Video display */}
+                {entry.photoUrl && (
+                  <div className="w-full rounded-lg overflow-hidden bg-secondary/20 aspect-video">
+                    {isVideo(entry.photoUrl) ? (
+                      <video
+                        src={entry.photoUrl}
+                        className="w-full h-full object-cover"
+                        controls
+                        playsInline
+                      />
+                    ) : (
+                      <img
+                        src={entry.photoUrl}
+                        alt="Reflection"
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                  </div>
+                )}
 
+                {/* Reflection text */}
                 <div className="space-y-2.5">
                   {entry.lines.slice(0, 7).map((line, idx) => (
                     <p key={idx} className="text-foreground/75 leading-relaxed text-[15px]">
@@ -154,7 +179,6 @@ export function FeaturedEntries() {
                       strokeLinecap="round"
                     />
                   </svg>
-                  <p className="text-sm text-foreground/60 italic font-serif">{entry.author}</p>
                   <p className="text-sm text-foreground/60 italic font-serif">{entry.neighborhood}</p>
                   <p className="text-sm text-foreground/60 italic font-serif">{entry.date}</p>
                 </div>
