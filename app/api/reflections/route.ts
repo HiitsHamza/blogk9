@@ -47,9 +47,34 @@ export async function POST(request: NextRequest) {
         const arrayBuffer = await photo.arrayBuffer()
         const buffer = Buffer.from(arrayBuffer)
 
-        // Upload to Supabase Storage - bucket name: "for photos and videos"
+        // Upload to Supabase Storage - bucket name: "k9media"
+        const bucketName = "k9media"
+        
+        // First, verify the bucket exists by listing buckets
+        const { data: buckets, error: listError } = await supabase.storage.listBuckets()
+        if (listError) {
+          console.error("[v0] Error listing buckets:", listError)
+        } else {
+          const bucketExists = buckets?.some(b => b.name === bucketName)
+          console.log("[v0] Available buckets:", buckets?.map(b => b.name))
+          console.log("[v0] Looking for bucket:", bucketName)
+          console.log("[v0] Bucket exists:", bucketExists)
+          
+          if (!bucketExists) {
+            return NextResponse.json(
+              { 
+                error: "Storage bucket not found", 
+                details: `The bucket "${bucketName}" does not exist. Available buckets: ${buckets?.map(b => b.name).join(", ") || "none"}. Please create it in Supabase Storage with public access enabled.`,
+                bucketName: bucketName,
+                availableBuckets: buckets?.map(b => b.name) || []
+              },
+              { status: 500 }
+            )
+          }
+        }
+        
         const { data: uploadData, error: uploadError } = await supabase.storage
-          .from("for photos and videos")
+          .from(bucketName)
           .upload(filePath, buffer, {
             contentType: photo.type,
             upsert: false,
@@ -57,6 +82,24 @@ export async function POST(request: NextRequest) {
 
         if (uploadError) {
           console.error("[v0] Storage upload error:", uploadError)
+          console.error("[v0] Upload error details:", {
+            message: uploadError.message,
+            statusCode: uploadError.statusCode,
+            status: uploadError.status
+          })
+          
+          // If bucket doesn't exist, provide helpful error message
+          if (uploadError.message?.includes("Bucket not found") || uploadError.statusCode === '404' || uploadError.status === 404) {
+            return NextResponse.json(
+              { 
+                error: "Storage bucket not found", 
+                details: `The bucket "${bucketName}" does not exist or is not accessible. Please verify the bucket name matches exactly (including spaces) and that it's public.`,
+                bucketName: bucketName
+              },
+              { status: 500 }
+            )
+          }
+          
           return NextResponse.json(
             { error: "Failed to upload photo", details: uploadError.message },
             { status: 500 }
@@ -64,8 +107,9 @@ export async function POST(request: NextRequest) {
         }
 
         // Get public URL
-        const { data: urlData } = supabase.storage.from("for photos and videos").getPublicUrl(filePath)
+        const { data: urlData } = supabase.storage.from(bucketName).getPublicUrl(filePath)
         photoUrl = urlData.publicUrl
+        console.log("[v0] Photo uploaded successfully:", photoUrl)
       }
     } else {
       // Handle JSON request

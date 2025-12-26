@@ -10,7 +10,6 @@ export function JournalForm() {
   const [neighborhood, setNeighborhood] = useState("")
   const [email, setEmail] = useState("")
   const [photo, setPhoto] = useState<File | null>(null)
-  const [website, setWebsite] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showToast, setShowToast] = useState(false)
 
@@ -21,12 +20,26 @@ export function JournalForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (website) {
-      console.log("[v0] Honeypot triggered, blocking spam submission")
-      return
+    // Check honeypot field directly from DOM to avoid state issues
+    const honeypotField = document.getElementById("website") as HTMLInputElement
+    const honeypotValue = honeypotField?.value || ""
+    
+    // Only block if honeypot has a meaningful value (likely spam bot)
+    // Allow if it's just whitespace or common autofill artifacts
+    if (honeypotValue && honeypotValue.trim().length > 0) {
+      // Double-check: if it looks like a real URL/website, it's probably spam
+      const looksLikeUrl = /^https?:\/\//i.test(honeypotValue.trim()) || 
+                          /^www\./i.test(honeypotValue.trim()) ||
+                          honeypotValue.trim().includes('.')
+      
+      if (looksLikeUrl) {
+        console.log("[v0] Honeypot triggered, blocking spam submission")
+        return
+      }
+      // If it's just a short string without URL patterns, might be autofill - allow it
     }
 
-    if (!neighborhood || !email) {
+    if (!reflection || !neighborhood || !email) {
       alert("Please fill in all required fields.")
       return
     }
@@ -88,6 +101,34 @@ export function JournalForm() {
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) {
+      setPhoto(null)
+      return
+    }
+
+    // Check file size (e.g., 50MB max)
+    const maxSize = 50 * 1024 * 1024 // 50MB
+    if (file.size > maxSize) {
+      alert("File size must be less than 50MB")
+      e.target.value = ""
+      setPhoto(null)
+      return
+    }
+
+    // Check file type
+    const validTypes = file.type.startsWith("image/") || file.type.startsWith("video/")
+    if (!validTypes) {
+      alert("Please select an image or video file")
+      e.target.value = ""
+      setPhoto(null)
+      return
+    }
+
+    setPhoto(file)
   }
 
   return (
@@ -166,23 +207,31 @@ export function JournalForm() {
               <input
                 type="text"
                 name="website"
-                value={website}
-                onChange={(e) => setWebsite(e.target.value)}
-                className="absolute opacity-0 pointer-events-none"
+                id="website"
+                defaultValue=""
+                autoComplete="new-password"
                 tabIndex={-1}
-                autoComplete="off"
                 aria-hidden="true"
+                style={{ 
+                  position: 'absolute', 
+                  left: '-9999px', 
+                  width: '1px', 
+                  height: '1px',
+                  opacity: 0,
+                  pointerEvents: 'none'
+                }}
+                readOnly
               />
 
               <div className="space-y-2">
                 <label htmlFor="photo" className="block text-sm font-semibold text-foreground">
-                  Photo <span className="text-foreground/60">(optional)</span>
+                  Photo/Video <span className="text-foreground/60">(optional)</span>
                 </label>
                 <input
                   type="file"
                   id="photo"
-                  accept="image/*"
-                  onChange={(e) => setPhoto(e.target.files?.[0] || null)}
+                  accept="image/*,video/*"
+                  onChange={handleFileChange}
                   className="w-full px-5 py-4 rounded-xl border-2 border-secondary focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all bg-white text-foreground shadow-sm file:mr-4 file:py-2 file:px-5 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-[color:var(--teal-900)] file:cursor-pointer file:transition-colors file:shadow-sm"
                 />
               </div>
