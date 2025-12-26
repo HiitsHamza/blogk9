@@ -1,14 +1,14 @@
 export function Manifesto() {
   return (
-    <section id="manifesto" className="py-12 md:py-20">
-      <div className="container mx-auto px-4 md:px-6 lg:px-8 max-w-4xl">
-        <div className="bg-primary rounded-3xl p-12 md:p-16 lg:p-20 shadow-2xl border border-primary/10">
-          <div className="space-y-8 text-center">
+    <section id="manifesto" className="py-10 md:py-12">
+      <div className="container mx-auto px-4 md:px-6 lg:px-8 max-w-6xl">
+        <div className="bg-primary rounded-3xl p-8 md:p-10 lg:p-12 shadow-2xl border border-primary/10">
+          <div className="space-y-4 text-center">
             <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-semibold text-white leading-tight tracking-tight">
               Manifesto
             </h2>
 
-            <div className="max-w-4xl mx-auto space-y-5 text-white/90 text-base md:text-lg leading-relaxed">
+            <div className="max-w-5xl mx-auto space-y-2.5 text-white/90 text-base md:text-lg leading-relaxed">
               <p>
                 We're two best friends living in downtown Toronto with a cat, preparing to welcome a dog into our lives.
               </p>
