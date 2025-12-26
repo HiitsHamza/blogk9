@@ -8,7 +8,7 @@ export function Manifesto() {
               Manifesto
             </h2>
 
-            <div className="max-w-2xl mx-auto space-y-5 text-white/90 text-base md:text-lg leading-relaxed">
+            <div className="max-w-4xl mx-auto space-y-5 text-white/90 text-base md:text-lg leading-relaxed">
               <p>
                 We're two best friends living in downtown Toronto with a cat, preparing to welcome a dog into our lives.
               </p>

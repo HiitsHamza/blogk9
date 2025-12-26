@@ -56,10 +56,6 @@ export function Hero() {
               >
                 Submit
               </button>
-
-              <div className="bg-accent text-accent-foreground px-5 py-2.5 rounded-full text-sm font-medium shadow-sm border border-primary/15 hover:brightness-[1.02] transition-all">
-                <span className="font-semibold">This week:</span> Matcha on us ☕
-              </div>
             </div>
 
             <p className="text-[12px] text-white/75 tracking-[0.18em] uppercase font-light">Forever is built daily.</p>
